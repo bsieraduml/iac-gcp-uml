@@ -12,6 +12,7 @@ data "template_file" "windows-metadata" {
   template = <<EOF
 # Install IIS
 Install-WindowsFeature -name Web-Server -IncludeManagementTools;
+Install-WindowsFeature Web-Asp-Net45;
 EOF
 }
 
