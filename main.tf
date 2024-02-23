@@ -69,3 +69,4 @@ resource "google_compute_instance" "vm_instance" {
     subnetwork = google_compute_subnetwork.private_network.self_link    
    
   }
+}
