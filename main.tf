@@ -9,6 +9,7 @@ provider "google" {
 
 resource "google_compute_network" "vpc_network" {
   name = "vnet-gcp-uml"
+  auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "network-with-private-secondary-ip-ranges" {
