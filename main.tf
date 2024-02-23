@@ -8,7 +8,7 @@ provider "google" {
 }
 
 resource "google_compute_network" "vpc_network" {
-  name = "vnet-gcp-uml"
+  name = "vnet-gcp-uml2"
   auto_create_subnetworks = false
 }
 
