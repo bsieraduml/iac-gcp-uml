@@ -76,7 +76,7 @@ resource "google_compute_forwarding_rule" "frontend_lb" {
 }
 #health_checks = ["https://www.googleapis.com/compute/beta/projects/project-gcp-uml/global/httpHealthChecks/health-check-lb"]
 resource "google_compute_target_pool" "lb_test" {
-  health_checks    = google_compute_http_health_check.health_check_lb.name
+  health_checks    = [google_compute_http_health_check.health_check_lb.name]
   instances        = ["us-east1-b/vm1-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-c/vm2-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-d/vm3-bsierad-iac-windows-uml-dev-vm239dea64"]
   name             = "lb-test"
   project          = "project-gcp-uml"
