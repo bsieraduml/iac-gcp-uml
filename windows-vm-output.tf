@@ -2,6 +2,10 @@
 ## GCP Windows VM - Output ##
 #############################
 
+output "vm-name" {
+  value = { for vm in keys(var.myvms) : vm => google_compute_instance.vm_instance_public[vm].name}
+}
+
 # output "vm-name" {
 #   value = google_compute_instance.vm_instance_public.*.name
 # }
