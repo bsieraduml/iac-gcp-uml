@@ -62,7 +62,7 @@ resource "google_compute_http_health_check" "health_check_lb" {
   timeout_sec         = 5
   unhealthy_threshold = 2
 }
-
+#target = "https://www.googleapis.com/compute/beta/projects/project-gcp-uml/regions/us-east1/targetPools/lb-test"
 resource "google_compute_forwarding_rule" "frontend_lb" {
  # ip_address            = "34.23.191.115"
   ip_protocol           = "TCP"
@@ -72,11 +72,11 @@ resource "google_compute_forwarding_rule" "frontend_lb" {
   port_range            = "80-80"
   project               = "project-gcp-uml"
   region                = "us-east1"
-  target                = "https://www.googleapis.com/compute/beta/projects/project-gcp-uml/regions/us-east1/targetPools/lb-test"
+  target                = google_compute_target_pool.lb_test.id
 }
-
+#health_checks = ["https://www.googleapis.com/compute/beta/projects/project-gcp-uml/global/httpHealthChecks/health-check-lb"]
 resource "google_compute_target_pool" "lb_test" {
-  health_checks    = ["https://www.googleapis.com/compute/beta/projects/project-gcp-uml/global/httpHealthChecks/health-check-lb"]
+  health_checks    = [google_compute_http_health_check.health_check_lb.name]
   instances        = ["us-east1-b/vm1-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-c/vm2-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-d/vm3-bsierad-iac-windows-uml-dev-vm239dea64"]
   name             = "lb-test"
   project          = "project-gcp-uml"
