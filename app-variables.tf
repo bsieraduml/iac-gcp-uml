@@ -25,3 +25,7 @@ variable "environment" {
   type        = string
   description = "This variable defines the environment to be built"
 }
+
+variable "myvms" {
+  type = map
+}
