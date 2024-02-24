@@ -17,13 +17,13 @@ network-subnet-cidr = "10.10.15.0/24"
 windows_instance_type = "n2-standard-2"
 
 myvms = {
-        # vm1 = {
-        #     zone = "us-east1-b"
-        # }
-        # vm2 = {
-        #     zone = "us-east1-c"
-        # }
-        # vm3 = {
-        #     zone = "us-east1-d"
-        # }
+        vm1 = {
+            zone = "us-east1-b"
+        }
+        vm2 = {
+            zone = "us-east1-b"
+        }
+        vm3 = {
+            zone = "us-east1-b"
+        }
 }
