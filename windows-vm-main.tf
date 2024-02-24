@@ -21,6 +21,8 @@ data "template_file" "windows-metadata" {
 # Install IIS
 Install-WindowsFeature -name Web-Server -IncludeManagementTools;
 Install-WindowsFeature Web-Asp-Net45;
+Remove-Item C:\inetpub\wwwroot\*.*
+hostname | Out-File c:\inetpub\wwwroot\index.html
 EOF
 }
 
