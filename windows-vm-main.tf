@@ -1,42 +1,53 @@
-# ###########################
-# ## GCP Windows VM - Main ##
-# ###########################
+###########################
+## GCP Windows VM - Main ##
+###########################
 
-# # Terraform plugin for creating random ids
-# resource "random_id" "instance_id" {
-#   byte_length = 4
-# }
+locals {
+    virtual_machines = {
+        "vm1" = {zone = "us-east1-b"},
+        "vm2" = {zone = "us-east1-c"},
+        "vm2" = {zone = "us-east1-d"}
+    }
+}
 
-# # Bootstrapping Script
-# data "template_file" "windows-metadata" {
-#   template = <<EOF
-# # Install IIS
-# Install-WindowsFeature -name Web-Server -IncludeManagementTools;
-# Install-WindowsFeature Web-Asp-Net45;
-# EOF
-# }
+# Terraform plugin for creating random ids
+resource "random_id" "instance_id" {
+  byte_length = 4
+}
 
-# # Create VM
-# resource "google_compute_instance" "vm_instance_public" {
-#   name         = "${lower(var.company)}-${lower(var.app_name)}-${var.environment}-vm${random_id.instance_id.hex}"
-#   machine_type = var.windows_instance_type
-#   zone         = var.gcp_zone
-#   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
-#   tags         = ["rdp", "http"]
+# Bootstrapping Script
+data "template_file" "windows-metadata" {
+  template = <<EOF
+# Install IIS
+Install-WindowsFeature -name Web-Server -IncludeManagementTools;
+Install-WindowsFeature Web-Asp-Net45;
+Remove-Item C:\inetpub\wwwroot\*.*
+hostname | Out-File c:\inetpub\wwwroot\index.html
+EOF
+}
 
-#   boot_disk {
-#     initialize_params {
-#       image = var.windows_2022_sku
-#     }
-#   }
+# Create VM
+resource "google_compute_instance" "vm_instance_public" {
+for_each = local.virtual_machines
+  name         = "${lower(each.key)}-${lower(var.company)}-${lower(var.app_name)}-${var.environment}-vm${random_id.instance_id.hex}"
+  machine_type = var.windows_instance_type
+  zone         = each.value.zone
+  hostname     = "${lower(each.key)}-${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
+  tags         = ["rdp", "http"]
 
-#   metadata = {
-#     sysprep-specialize-script-ps1 = data.template_file.windows-metadata.rendered
-#   }
+  boot_disk {
+    initialize_params {
+      image = var.windows_2022_sku
+    }
+  }
 
-#   network_interface {
-#     network    = google_compute_network.vpc.name
-#     subnetwork = google_compute_subnetwork.network_subnet.name
-#     access_config {}
-#   }
-# } 
+  metadata = {
+    sysprep-specialize-script-ps1 = data.template_file.windows-metadata.rendered
+  }
+
+  network_interface {
+    network    = google_compute_network.vpc.name
+    subnetwork = google_compute_subnetwork.network_subnet.name
+    access_config {}
+  }
+} 
