@@ -51,3 +51,35 @@ for_each = var.myvms
     access_config {}
   }
 } 
+
+resource "google_compute_http_health_check" "health_check_lb" {
+  check_interval_sec  = 5
+  healthy_threshold   = 2
+  name                = "health-check-lb"
+  port                = 80
+  project             = "project-gcp-uml"
+  request_path        = "/"
+  timeout_sec         = 5
+  unhealthy_threshold = 2
+}
+
+resource "google_compute_forwarding_rule" "frontend_lb" {
+ # ip_address            = "34.23.191.115"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL"
+  name                  = "frontend-lb"
+  network_tier          = "PREMIUM"
+  port_range            = "80-80"
+  project               = "project-gcp-uml"
+  region                = "us-east1"
+  target                = "https://www.googleapis.com/compute/beta/projects/project-gcp-uml/regions/us-east1/targetPools/lb-test"
+}
+
+resource "google_compute_target_pool" "lb_test" {
+  health_checks    = ["https://www.googleapis.com/compute/beta/projects/project-gcp-uml/global/httpHealthChecks/health-check-lb"]
+  instances        = ["us-east1-b/vm1-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-c/vm2-bsierad-iac-windows-uml-dev-vm239dea64", "us-east1-d/vm3-bsierad-iac-windows-uml-dev-vm239dea64"]
+  name             = "lb-test"
+  project          = "project-gcp-uml"
+  region           = "us-east1"
+  session_affinity = "NONE"
+}
