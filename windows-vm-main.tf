@@ -2,13 +2,13 @@
 ## GCP Windows VM - Main ##
 ###########################
 
-locals {
-    virtual_machines = {
-        "vm1" = {zone = "us-east1-b"},
-        "vm2" = {zone = "us-east1-c"},
-        "vm2" = {zone = "us-east1-d"}
-    }
-}
+# locals {
+#     virtual_machines = {
+#         "vm1" = {zone = "us-east1-b"},
+#         "vm2" = {zone = "us-east1-c"},
+#         "vm3" = {zone = "us-east1-d"}
+#     }
+# }
 
 # Terraform plugin for creating random ids
 resource "random_id" "instance_id" {
@@ -28,7 +28,7 @@ EOF
 
 # Create VM
 resource "google_compute_instance" "vm_instance_public" {
-for_each = local.virtual_machines
+for_each = var.myvms
   name         = "${lower(each.key)}-${lower(var.company)}-${lower(var.app_name)}-${var.environment}-vm${random_id.instance_id.hex}"
   machine_type = var.windows_instance_type
   zone         = each.value.zone

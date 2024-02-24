@@ -7,3 +7,7 @@ variable "windows_instance_type" {
   description = "VM instance type"
   default     = "n2-standard-2"
 }
+
+variable "myvms" {
+  type = map
+}
