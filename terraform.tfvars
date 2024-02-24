@@ -21,9 +21,9 @@ myvms = {
             zone = "us-east1-b"
         }
         vm2 = {
-            zone = "us-east1-b"
+            zone = "us-east1-c"
         }
         vm3 = {
-            zone = "us-east1-b"
+            zone = "us-east1-d"
         }
 }
