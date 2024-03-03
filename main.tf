@@ -52,7 +52,7 @@ resource "google_compute_region_instance_group_manager" "default" {
   name                      = "windows-region-managed-instance-group"
   region                    = "us-east1"
   distribution_policy_zones = ["us-east1-b", "us-east1-c", "us-east1-d"]
-  target_size               = 3
+  target_size               = 0
   base_instance_name        = "instance"
   named_port {
     name = "http"
