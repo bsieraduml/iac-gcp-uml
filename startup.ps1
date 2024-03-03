@@ -1,4 +1,4 @@
-# Install IIS (Web-Server) and ASP.NET 4.5
+# Install IIS (Web-Server) and ASP.NET 4.5 
 Install-WindowsFeature -Name Web-Server, Web-Asp-Net45 -IncludeManagementTools
 
 # Remove files in folder C:\inetpub\wwwroot
